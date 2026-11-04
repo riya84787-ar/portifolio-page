@@ -37,6 +37,7 @@ h2 { font-size: 36px; margin: 0 0 16px; }
 .site-header { background: var(--ink); color: var(--bg); }
 
 .header-inner {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
@@ -48,8 +49,40 @@ h2 { font-size: 36px; margin: 0 0 16px; }
 
 .logo { font-family: 'DM Serif Display', serif; font-size: 26px; }
 
-.main-nav { display: flex; flex-wrap: wrap; gap: 28px; font-weight: 500; }
+.main-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 28px;
+  font-weight: 500;
+}
 .main-nav a:hover { color: #7FD1C8; }
+
+/* Week 3: hamburger button (desktop par hidden) */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  color: inherit;
+  font-size: 1.3rem;
+  line-height: 1;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+/* Week 3: dark mode button */
+.theme-toggle {
+  background: none;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  color: inherit;
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
 
 /* ---------- Hero ---------- */
 .hero {
@@ -84,6 +117,9 @@ h2 { font-size: 36px; margin: 0 0 16px; }
   border-radius: 8px;
 }
 .btn:hover { color: var(--white); background: #0B5A54; }
+
+/* Week 3: <button class="btn"> ko link wale button jaisa dikhane ke liye */
+button.btn { border: 0; font: inherit; font-weight: 700; cursor: pointer; }
 
 .hero-avatar {
   width: 280px;
@@ -168,8 +204,7 @@ h2 { font-size: 36px; margin: 0 0 16px; }
   font-weight: bold;
   text-decoration: none;
 }
-.card-body a:hover { text-decoration: underline; }
-
+.card-body a:hover { text-decoration: undline; }
 /* ---------- Footer ---------- */
 .site-footer { background: var(--ink); color: var(--bg); }
 
@@ -185,6 +220,81 @@ h2 { font-size: 36px; margin: 0 0 16px; }
 
 .site-footer h2 { font-size: 24px; margin: 0 0 8px; }
 .site-footer p { margin: 0; color: #C9C6BD; }
+.site-footer p a { text-decoration: underline; }
+
+/* ---------- Week 3: contact form ---------- */
+.contact-form { margin-top: 20px; width: 100%; max-width: 440px; }
+.contact-form .field { margin-bottom: 14px; }
+.contact-form label { display: block; margin-bottom: 4px; font-weight: 500; }
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  background: #26262b;
+  color: #F6F4EF;
+  border: 1px solid #4A4A52;
+  border-radius: 6px;
+  font: inherit;
+}
+.contact-form input:focus,
+.contact-form textarea:focus { outline: 2px solid #7FD1C8; outline-offset: 1px; }
+.contact-form input.invalid,
+.contact-form textarea.invalid { border-color: #ff8a80; }
+
+.contact-form .error {
+  display: block;
+  min-height: 1.2em;
+  margin-top: 4px;
+  color: #ff8a80;
+  font-size: 0.85rem;
+}
+
+.site-footer .form-status { margin-top: 12px; font-weight: 500; color: #C9C6BD; }
+.site-footer .form-status.success { color: #7ee0a8; }
+
+/* ---------- Week 3: scroll reveal (sirf JS chalne par hide hota hai) ---------- */
+.js .reveal {
+  opacity: 0;
+  translate: 0 24px;
+  transition: opacity 0.6s ease, translate 0.6s ease;
+}
+.js .reveal.visible { opacity: 1; translate: 0 0; }
+
+/* ---------- Week 3: back to top button ---------- */
+.back-to-top {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 60;
+}
+.back-to-top.show { opacity: 1; pointer-events: auto; }
+
+/* ---------- Week 3: dark mode (sirf variables badalte hain) ---------- */
+body.dark {
+  --bg: #14161A;
+  --ink: #ECEAE4;
+  --muted: #B5B3AB;
+  --white: #1D2025;
+  --line: #2E3238;
+  --accent: #2BB5A8;
+}
+body.dark .site-header,
+body.dark .site-footer { background: #0B0C0E; color: #ECEAE4; }
+body.dark .btn { color: #0B0C0E; }
+body.dark .btn:hover { background: #7FD1C8; color: #0B0C0E; }
+body.dark .card-body a { color: #4FD1A0; }
 
 /* ---------- Responsive: tablet ---------- */
 @media (max-width: 900px) {
@@ -194,8 +304,39 @@ h2 { font-size: 36px; margin: 0 0 16px; }
 /* ---------- Responsive: mobile ---------- */
 @media (max-width: 600px) {
   .container { padding: 0 20px; }
-  .header-inner { flex-direction: column; align-items: flex-start; }
-  .main-nav { gap: 16px; }
+
+  /* Week 3: logo + hamburger ek row mein, menu neeche slide hota hai */
+  .header-inner { flex-direction: row; flex-wrap: nowrap; align-items: center; }
+  .menu-toggle { display: block; }
+
+  .main-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 0;
+    background: #26262b;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: max-height 0.35s ease, opacity 0.25s ease, visibility 0s 0.35s;
+  }
+  .main-nav.open {
+    max-height: 420px;
+    opacity: 1;
+    visibility: visible;
+    transition: max-height 0.35s ease, opacity 0.25s ease, visibility 0s 0s;
+  }
+  .main-nav a { display: block; padding: 12px 20px; }
+  .theme-toggle { margin: 8px 20px 16px; align-self: flex-start; }
+  body.dark .main-nav { background: #1B1E23; }
+
   .hero { padding-top: 48px; padding-bottom: 48px; gap: 32px; }
   .intro { font-size: 17px; }
   .hero-avatar { width: 160px; height: 160px; font-size: 52px; }
@@ -204,4 +345,8 @@ h2 { font-size: 36px; margin: 0 0 16px; }
   .two-col { gap: 32px; }
   .projects { padding-top: 48px; padding-bottom: 48px; }
   .footer-inner { flex-direction: column; align-items: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal, .main-nav, .back-to-top { transition: none; }
 }
