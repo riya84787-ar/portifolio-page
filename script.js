@@ -1,6 +1,8 @@
 // "js" class lagti hai taaki CSS ka .js .reveal animation chale
 document.documentElement.classList.add("js");
 
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 /* ---------- 1. Dark mode (body.dark + localStorage) ---------- */
 const themeToggle = document.getElementById("themeToggle");
 
@@ -61,9 +63,12 @@ if (menuToggle && mainNav) {
     a.addEventListener("click", () => setMenu(false))
   );
 
-  // Escape dabane par band
+  // Week 4: Escape dabane par menu band ho aur focus wapas ☰ button par aaye
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") setMenu(false);
+    if (e.key === "Escape" && mainNav.classList.contains("open")) {
+      setMenu(false);
+      menuToggle.focus();
+    }
   });
 
   // Bahar click karne par band
@@ -83,16 +88,19 @@ if (menuToggle && mainNav) {
   });
 }
 
-/* ---------- 3. Smooth scroll ---------- */
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
+/* ---------- 3. Smooth scroll + Week 4: focus management ---------- */
 document.querySelectorAll('a[href^="#"]').forEach((link) => {
   link.addEventListener("click", (e) => {
-    const target = document.querySelector(link.getAttribute("href"));
+    const href = link.getAttribute("href");
+    const target = document.querySelector(href);
     if (!target) return;
     e.preventDefault();
     target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
-    history.replaceState(null, "", link.getAttribute("href"));
+    history.replaceState(null, "", href);
+
+    // Week 4: keyboard / screen reader user ka focus bhi section par jaye
+    if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+    target.focus({ preventScroll: true });
   });
 });
 
@@ -112,27 +120,51 @@ function onScroll() {
   if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) {
     current = "contact";
   }
-  navLinks.forEach((a) =>
-    a.classList.toggle("active", a.getAttribute("href") === "#" + current)
-  );
+  navLinks.forEach((a) => {
+    const isActive = a.getAttribute("href") === "#" + current;
+    a.classList.toggle("active", isActive);
+    // Week 4: screen reader ko bhi pata chale ki kaunsa link current hai
+    if (isActive) a.setAttribute("aria-current", "true");
+    else a.removeAttribute("aria-current");
+  });
 
   // Back-to-top button
   if (backToTop) backToTop.classList.toggle("show", window.scrollY > 400);
 }
 
-window.addEventListener("scroll", onScroll, { passive: true });
+// Week 4 (performance): scroll event ko requestAnimationFrame se throttle kiya
+let ticking = false;
+window.addEventListener(
+  "scroll",
+  () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        onScroll();
+        ticking = false;
+      });
+    }
+  },
+  { passive: true }
+);
 onScroll();
 
 if (backToTop) {
-  backToTop.addEventListener("click", () =>
-    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" })
-  );
+  backToTop.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    // Week 4: focus page ke start par wapas
+    const skip = document.querySelector(".skip-link");
+    if (skip) skip.focus({ preventScroll: true });
+  });
 }
 
 /* ---------- 5. Scroll reveal (.reveal -> .visible) ---------- */
 const revealEls = document.querySelectorAll(".reveal");
 
-if ("IntersectionObserver" in window) {
+// Week 4: reduced-motion ya purane browser mein content seedha dikhao
+if (reduceMotion || !("IntersectionObserver" in window)) {
+  revealEls.forEach((el) => el.classList.add("visible"));
+} else {
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -145,8 +177,6 @@ if ("IntersectionObserver" in window) {
     { threshold: 0.15 }
   );
   revealEls.forEach((el) => observer.observe(el));
-} else {
-  revealEls.forEach((el) => el.classList.add("visible"));
 }
 
 /* ---------- 6. Contact form validation ---------- */
@@ -209,5 +239,10 @@ if (form) {
     status.textContent = "Thanks " + name + "! Your message has been sent.";
     status.classList.add("success");
     form.reset();
+    // Week 4: reset ke baad purane aria-invalid hata do
+    fields.forEach((f) => {
+      f.input.removeAttribute("aria-invalid");
+      f.input.classList.remove("invalid");
+    });
   });
 }

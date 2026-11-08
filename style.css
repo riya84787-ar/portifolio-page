@@ -14,17 +14,17 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'DM Sans', Arial, sans-serif;
   line-height: 1.6;
 }
 
-/* Fluid images (added for Week 2) */
+/* Fluid images */
 img { max-width: 100%; height: auto; }
 
 a { color: inherit; text-decoration: none; }
 a:hover { color: var(--accent); }
 
-h1, h2 { font-family: 'DM Serif Display', serif; font-weight: 400; }
+h1, h2 { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; }
 h2 { font-size: 36px; margin: 0 0 16px; }
 
 .container {
@@ -32,6 +32,30 @@ h2 { font-size: 36px; margin: 0 0 16px; }
   margin: 0 auto;
   padding: 0 32px;
 }
+
+/* ---------- Week 4: accessibility basics ---------- */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: #000;
+  color: #fff;
+  padding: 10px 16px;
+  z-index: 1000;
+  border-radius: 0 0 6px 0;
+}
+.skip-link:focus { left: 0; color: #fff; }
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+.site-header :focus-visible,
+.site-footer :focus-visible { outline-color: #7FD1C8; }
+main:focus { outline: none; }
 
 /* ---------- Header and nav ---------- */
 .site-header { background: var(--ink); color: var(--bg); }
@@ -47,7 +71,7 @@ h2 { font-size: 36px; margin: 0 0 16px; }
   padding-bottom: 20px;
 }
 
-.logo { font-family: 'DM Serif Display', serif; font-size: 26px; }
+.logo { font-family: 'DM Serif Display', Georgia, serif; font-size: 26px; }
 
 .main-nav {
   display: flex;
@@ -58,7 +82,7 @@ h2 { font-size: 36px; margin: 0 0 16px; }
 }
 .main-nav a:hover { color: #7FD1C8; }
 
-/* Week 3: hamburger button (desktop par hidden) */
+/* Hamburger button (desktop par hidden) */
 .menu-toggle {
   display: none;
   background: none;
@@ -68,17 +92,18 @@ h2 { font-size: 36px; margin: 0 0 16px; }
   font-size: 1.3rem;
   line-height: 1;
   padding: 6px 12px;
+  min-height: 44px;
   cursor: pointer;
 }
 
-/* Week 3: dark mode button */
+/* Dark mode button (44px tap target) */
 .theme-toggle {
   background: none;
   border: 1px solid currentColor;
   border-radius: 50%;
   color: inherit;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   font-size: 1rem;
   line-height: 1;
   cursor: pointer;
@@ -99,7 +124,6 @@ h2 { font-size: 36px; margin: 0 0 16px; }
 
 .role { margin: 0; font-size: 14px; font-weight: 700; color: var(--accent); }
 
-/* Fluid heading using clamp() (added for Week 2) */
 .hero h1 {
   margin: 16px 0 20px;
   font-size: clamp(2.25rem, 6vw, 4rem);
@@ -111,6 +135,7 @@ h2 { font-size: 36px; margin: 0 0 16px; }
 .btn {
   display: inline-block;
   padding: 14px 28px;
+  min-height: 44px;
   background: var(--accent);
   color: var(--white);
   font-weight: 700;
@@ -118,7 +143,6 @@ h2 { font-size: 36px; margin: 0 0 16px; }
 }
 .btn:hover { color: var(--white); background: #0B5A54; }
 
-/* Week 3: <button class="btn"> ko link wale button jaisa dikhane ke liye */
 button.btn { border: 0; font: inherit; font-weight: 700; cursor: pointer; }
 
 .hero-avatar {
@@ -130,7 +154,7 @@ button.btn { border: 0; font: inherit; font-weight: 700; cursor: pointer; }
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'DM Serif Display', serif;
+  font-family: 'DM Serif Display', Georgia, serif;
   font-size: 96px;
 }
 
@@ -142,7 +166,6 @@ button.btn { border: 0; font: inherit; font-weight: 700; cursor: pointer; }
   padding: 64px 0;
 }
 
-/* min(100%, 320px) stops sideways scroll on small phones (fixed for Week 2) */
 .two-col {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
@@ -177,14 +200,8 @@ button.btn { border: 0; font: inherit; font-weight: 700; cursor: pointer; }
 }
 
 .thumb { height: 160px; }
-.thumb-1 img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background: #fff;
-  display: block;
-}
-.thumb-2 img {
+/* Week 4: dono thumb rules ek mein merge (less redundancy) */
+.thumb img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -196,15 +213,18 @@ button.btn { border: 0; font: inherit; font-weight: 700; cursor: pointer; }
 .card-body h3 { margin: 0 0 8px; font-size: 20px; }
 .card-body p { margin: 0; color: var(--muted); }
 
-/* Link style now applies on all screen sizes (moved out of media query) */
+/* Week 4: darker green for better contrast (4.5:1+) */
 .card-body a {
   display: inline-block;
   margin-top: 10px;
-  color: #0b8f55;
+  padding: 8px 0;
+  color: #0A7A49;
   font-weight: bold;
   text-decoration: none;
 }
-.card-body a:hover { text-decoration: undline; }
+/* Week 4: typo fix (undline -> underline) */
+.card-body a:hover { text-decoration: underline; }
+
 /* ---------- Footer ---------- */
 .site-footer { background: var(--ink); color: var(--bg); }
 
@@ -222,7 +242,7 @@ button.btn { border: 0; font: inherit; font-weight: 700; cursor: pointer; }
 .site-footer p { margin: 0; color: #C9C6BD; }
 .site-footer p a { text-decoration: underline; }
 
-/* ---------- Week 3: contact form ---------- */
+/* ---------- Contact form ---------- */
 .contact-form { margin-top: 20px; width: 100%; max-width: 440px; }
 .contact-form .field { margin-bottom: 14px; }
 .contact-form label { display: block; margin-bottom: 4px; font-weight: 500; }
@@ -233,7 +253,7 @@ button.btn { border: 0; font: inherit; font-weight: 700; cursor: pointer; }
   padding: 10px 12px;
   background: #26262b;
   color: #F6F4EF;
-  border: 1px solid #4A4A52;
+  border: 1px solid #8A8A93;
   border-radius: 6px;
   font: inherit;
 }
@@ -253,7 +273,7 @@ button.btn { border: 0; font: inherit; font-weight: 700; cursor: pointer; }
 .site-footer .form-status { margin-top: 12px; font-weight: 500; color: #C9C6BD; }
 .site-footer .form-status.success { color: #7ee0a8; }
 
-/* ---------- Week 3: scroll reveal (sirf JS chalne par hide hota hai) ---------- */
+/* ---------- Scroll reveal (sirf JS chalne par hide hota hai) ---------- */
 .js .reveal {
   opacity: 0;
   translate: 0 24px;
@@ -261,7 +281,7 @@ button.btn { border: 0; font: inherit; font-weight: 700; cursor: pointer; }
 }
 .js .reveal.visible { opacity: 1; translate: 0 0; }
 
-/* ---------- Week 3: back to top button ---------- */
+/* ---------- Back to top button ---------- */
 .back-to-top {
   position: fixed;
   right: 18px;
@@ -281,7 +301,7 @@ button.btn { border: 0; font: inherit; font-weight: 700; cursor: pointer; }
 }
 .back-to-top.show { opacity: 1; pointer-events: auto; }
 
-/* ---------- Week 3: dark mode (sirf variables badalte hain) ---------- */
+/* ---------- Dark mode ---------- */
 body.dark {
   --bg: #14161A;
   --ink: #ECEAE4;
@@ -295,6 +315,8 @@ body.dark .site-footer { background: #0B0C0E; color: #ECEAE4; }
 body.dark .btn { color: #0B0C0E; }
 body.dark .btn:hover { background: #7FD1C8; color: #0B0C0E; }
 body.dark .card-body a { color: #4FD1A0; }
+/* Week 4: dark mode mein back-to-top ka contrast theek kiya */
+body.dark .back-to-top { color: #0B0C0E; }
 
 /* ---------- Responsive: tablet ---------- */
 @media (max-width: 900px) {
@@ -305,7 +327,6 @@ body.dark .card-body a { color: #4FD1A0; }
 @media (max-width: 600px) {
   .container { padding: 0 20px; }
 
-  /* Week 3: logo + hamburger ek row mein, menu neeche slide hota hai */
   .header-inner { flex-direction: row; flex-wrap: nowrap; align-items: center; }
   .menu-toggle { display: block; }
 
@@ -347,6 +368,12 @@ body.dark .card-body a { color: #4FD1A0; }
   .footer-inner { flex-direction: column; align-items: flex-start; }
 }
 
+/* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .js .reveal, .main-nav, .back-to-top { transition: none; }
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .js .reveal { opacity: 1 !important; translate: none !important; }
 }
