@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Riya Baghel | Frontend Web Developer</title>
-  <meta name="description" content="Portfolio of Riya Baghel, a frontend web developer. Projects include the FIXIT App and the SMARTDUKKAN App.">
+  <meta name="description" content="Portfolio SPA of Riya Baghel, a frontend web developer. Projects include the FIXIT App and the SMARTDUKKAN App.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -19,11 +19,11 @@
       <div class="logo">Riya Baghel</div>
 
       <nav class="main-nav" id="mainNav" aria-label="Main navigation">
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
-        <a href="#projects">Projects</a>
-        <a href="#contact">Contact</a>
+        <a href="#home" data-link>Home</a>
+        <a href="#about" data-link>About</a>
+        <a href="#skills" data-link>Skills</a>
+        <a href="#projects" data-link>Projects</a>
+        <a href="#contact" data-link>Contact</a>
         <button type="button" id="themeToggle" class="theme-toggle" aria-label="Switch to dark mode">🌙</button>
       </nav>
 
@@ -32,68 +32,85 @@
   </header>
 
   <main id="main" tabindex="-1">
-    <section id="home" class="hero container" aria-labelledby="hero-title">
-      <div class="hero-text">
-        <p class="role">Frontend Web Developer</p>
-        <h1 id="hero-title">Hi, I build clean and responsive web pages.</h1>
-        <p class="intro">I turn design ideas into simple, fast websites using semantic HTML and well-organised CSS.</p>
-        <a href="#projects" class="btn">View my projects</a>
-      </div>
-      <div class="hero-avatar" aria-hidden="true">RB</div>
-    </section>
 
-    <div class="band">
-      <div class="container two-col">
-        <section id="about" class="reveal" aria-labelledby="about-title">
-          <h2 id="about-title">About me</h2>
-          <p>I am a student learning frontend development. I enjoy planning a layout first and then building it step by step. [Write 1-2 lines about yourself here]</p>
-        </section>
-        <section id="skills" class="reveal" aria-labelledby="skills-title">
-          <h2 id="skills-title">Skills</h2>
-          <ul class="skill-list">
-            <li>HTML5</li>
-            <li>CSS3</li>
-            <li>Flexbox and Grid</li>
-            <li>Responsive design</li>
-            <li>JavaScript (DOM and events)</li>
-            <li>Git and GitHub</li>
-          </ul>
-        </section>
+    <!-- HOME -->
+    <div class="view" id="view-home" data-title="Home">
+      <section class="hero container" aria-labelledby="hero-title">
+        <div class="hero-text">
+          <p class="role">Frontend Web Developer</p>
+          <h1 id="hero-title">Hi, I build clean and responsive web pages.</h1>
+          <p class="intro">I turn design ideas into simple, fast websites using semantic HTML,well-organised CSS and JavaScript.</p>
+          <a href="#projects" class="btn" data-link>View my projects</a>
+        </div>
+        <div class="hero-avatar" aria-hidden="true">RB</div>
+      </section>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="view" id="view-about" data-title="About">
+      <div class="band">
+        <div class="container">
+          <section class="reveal visible" aria-labelledby="about-title">
+            <h2 id="about-title">About me</h2>
+            <p>I am an MBA student learning frontend development. I enjoy planning a layout first and then building it step by step.I build this portfolio as a Single Page Application using HTML, CSS and JavaScript</p>
+          </section>
+        </div>
       </div>
     </div>
 
-    <section id="projects" class="container projects" aria-labelledby="projects-title">
-      <h2 id="projects-title">Projects</h2>
-      <div class="card-grid">
-        <article class="card reveal">
-          <div class="thumb thumb-1">
-            <img src="fixit.png" alt="Screenshot of the FIXIT app showing a list of local repair services" width="600" height="400" loading="lazy" decoding="async">
-          </div>
-          <div class="card-body">
-            <h3>FIXIT App</h3>
-            <p>A service booking app to find and book local repair professionals like plumbers and electricians, with a simple and easy-to-use interface.</p>
-            <a href="FIXIT.html" aria-label="View FIXIT App project">View Project</a>
-          </div>
-        </article>
-        <article class="card reveal">
-          <div class="thumb thumb-2">
-            <img src="SMARTDUKKAN.png" alt="Screenshot of the SMARTDUKKAN app showing products, billing and inventory" width="600" height="400" loading="lazy" decoding="async">
-          </div>
-          <div class="card-body">
-            <h3>SMARTDUKKAN App</h3>
-            <p>A smart shop management app to manage products, billing and inventory.</p>
-            <a href="SMARTDUKKAN.html" aria-label="View SMARTDUKKAN App project">View Project</a>
-          </div>
-        </article>
+    <!-- SKILLS -->
+    <div class="view" id="view-skills" data-title="Skills">
+      <div class="band">
+        <div class="container">
+          <section class="reveal visible" aria-labelledby="skills-title">
+            <h2 id="skills-title">Skills</h2>
+            <ul class="skill-list">
+              <li>HTML5</li>
+              <li>CSS3</li>
+              <li>Flexbox and Grid</li>
+              <li>Responsive design</li>
+              <li>JavaScript (DOM and events)</li>
+              <li>Git and GitHub</li>
+            </ul>
+          </section>
+        </div>
       </div>
-    </section>
-  </main>
+    </div>
 
-  <footer id="contact" class="site-footer">
-    <div class="container footer-inner">
-      <div>
-        <h2>Contact</h2>
-        <p><a href="mailto:riya84787@gmail.com">riya84787@gmail.com</a> | <a href="https://github.com/your-username">GitHub</a></p>
+    <!-- PROJECTS -->
+    <div class="view" id="view-projects" data-title="Projects">
+      <section class="container projects" aria-labelledby="projects-title">
+        <h2 id="projects-title">Projects</h2>
+        <div class="card-grid">
+          <article class="card reveal visible">
+            <div class="thumb thumb-1">
+              <img src="fixit.png" alt="Screenshot of the FIXIT app showing a list of local repair services" width="600" height="400" loading="lazy" decoding="async">
+            </div>
+            <div class="card-body">
+              <h3>FIXIT App</h3>
+              <p>A service booking app to find and book local repair professionals like plumbers and electricians, with a simple and easy-to-use interface.</p>
+              <a href="FIXIT.html" aria-label="View FIXIT App project">View Project</a>
+            </div>
+          </article>
+          <article class="card reveal visible">
+            <div class="thumb thumb-2">
+              <img src="SMARTDUKKAN.png" alt="Screenshot of the SMARTDUKKAN app showing products, billing and inventory" width="600" height="400" loading="lazy" decoding="async">
+            </div>
+            <div class="card-body">
+              <h3>SMARTDUKKAN App</h3>
+              <p>A smart shop management app to manage products, billing and inventory.</p>
+              <a href="SMARTDUKKAN.html" aria-label="View SMARTDUKKAN App project">View Project</a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="view" id="view-contact" data-title="Contact">
+      <section class="container contact-view" aria-labelledby="contact-title">
+        <h2 id="contact-title">Contact</h2>
+        <p><a href="mailto:riya84787@gmail.com">riya84787@gmail.com</a> | <a href="https://github.com/riya84787-ar/portifolio-page">GitHub</a></p>
 
         <form id="contactForm" class="contact-form" novalidate>
           <div class="field">
@@ -114,7 +131,22 @@
           <button type="submit" class="btn">Send message</button>
           <p id="formStatus" class="form-status" role="status" aria-live="polite"></p>
         </form>
-      </div>
+      </section>
+    </div>
+
+    <!-- 404 -->
+    <div class="view" id="view-404" data-title="Page not found">
+      <section class="container not-found">
+        <h2>404 - Page not found</h2>
+        <p>Ye page exist nahi karta. Please menu se koi page choose karo.</p>
+        <a href="#home" class="btn" data-link>Back to Home</a>
+      </section>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
       <p>&copy; 2026 Riya Baghel</p>
     </div>
   </footer>
@@ -122,5 +154,6 @@
   <button type="button" id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
 
   <script src="script.js" defer></script>
+  <script src="spa.js" defer></script>
 </body>
 </html>

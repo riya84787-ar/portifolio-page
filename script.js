@@ -23,7 +23,6 @@ try {
   savedTheme = localStorage.getItem("theme");
 } catch (e) {}
 
-// Pehli baar: device ki setting follow karo
 if (!savedTheme) {
   savedTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
@@ -58,12 +57,10 @@ if (menuToggle && mainNav) {
     setMenu(!mainNav.classList.contains("open"))
   );
 
-  // Link click par menu band
   mainNav.querySelectorAll("a").forEach((a) =>
     a.addEventListener("click", () => setMenu(false))
   );
 
-  // Week 4: Escape dabane par menu band ho aur focus wapas ☰ button par aaye
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && mainNav.classList.contains("open")) {
       setMenu(false);
@@ -71,7 +68,6 @@ if (menuToggle && mainNav) {
     }
   });
 
-  // Bahar click karne par band
   document.addEventListener("click", (e) => {
     if (
       mainNav.classList.contains("open") &&
@@ -82,57 +78,68 @@ if (menuToggle && mainNav) {
     }
   });
 
-  // Desktop size par wapas aane par reset
   window.addEventListener("resize", () => {
     if (window.innerWidth > 600) setMenu(false);
   });
 }
 
-/* ---------- 3. Smooth scroll + Week 4: focus management ---------- */
-document.querySelectorAll('a[href^="#"]').forEach((link) => {
-  link.addEventListener("click", (e) => {
-    const href = link.getAttribute("href");
-    const target = document.querySelector(href);
-    if (!target) return;
-    e.preventDefault();
-    target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
-    history.replaceState(null, "", href);
+/* ---------- 3. SPA router (hash based) ---------- */
+const views = document.querySelectorAll(".view");
+const routeLinks = document.querySelectorAll("[data-link]");
+const mainEl = document.getElementById("main");
+const routes = ["home", "about", "skills", "projects", "contact"];
+const state = { current: null }; // simple state management
 
-    // Week 4: keyboard / screen reader user ka focus bhi section par jaye
-    if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
-    target.focus({ preventScroll: true });
-  });
-});
+function getRoute() {
+  const hash = window.location.hash.replace("#", "").trim();
+  return hash === "" ? "home" : hash;
+}
 
-/* ---------- 4. Active nav link + back-to-top ---------- */
-const sectionIds = ["home", "about", "skills", "projects", "contact"];
-const navLinks = document.querySelectorAll(".main-nav a");
-const backToTop = document.getElementById("backToTop");
+function render() {
+  const route = getRoute();
+  const id = routes.includes(route) ? route : "404"; // unknown URL = 404 page
+  if (state.current === id) return;
 
-function onScroll() {
-  // Active link
-  let current = "home";
-  sectionIds.forEach((id) => {
-    const el = document.getElementById(id);
-    if (el && window.scrollY >= el.offsetTop - 160) current = id;
-  });
-  // Page ke bilkul neeche pahunche to Contact active
-  if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) {
-    current = "contact";
-  }
-  navLinks.forEach((a) => {
-    const isActive = a.getAttribute("href") === "#" + current;
-    a.classList.toggle("active", isActive);
-    // Week 4: screen reader ko bhi pata chale ki kaunsa link current hai
-    if (isActive) a.setAttribute("aria-current", "true");
+  const target = document.getElementById("view-" + id);
+  if (!target) return;
+
+  views.forEach((v) => v.classList.remove("active"));
+  target.classList.add("active");
+  state.current = id;
+
+  // Active link highlight + aria-current
+  routeLinks.forEach((a) => {
+    const isActive = a.getAttribute("href") === "#" + id;
+    a.classList.toggle("active-link", isActive);
+    if (isActive && a.closest(".main-nav")) a.setAttribute("aria-current", "page");
     else a.removeAttribute("aria-current");
   });
 
-  // Back-to-top button
+  document.title = target.dataset.title + " | Riya Baghel";
+  window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+  if (mainEl) mainEl.focus({ preventScroll: true });
+  setMenu(false);
+}
+
+window.addEventListener("hashchange", render); // back/forward button support
+render();
+
+// Skip link: hash change kiye bina main content par focus
+const skipLink = document.querySelector(".skip-link");
+if (skipLink && mainEl) {
+  skipLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    mainEl.focus();
+  });
+}
+
+/* ---------- 4. Back-to-top button ---------- */
+const backToTop = document.getElementById("backToTop");
+
+function onScroll() {
   if (backToTop) backToTop.classList.toggle("show", window.scrollY > 400);
 }
 
-// Week 4 (performance): scroll event ko requestAnimationFrame se throttle kiya
 let ticking = false;
 window.addEventListener(
   "scroll",
@@ -152,16 +159,13 @@ onScroll();
 if (backToTop) {
   backToTop.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
-    // Week 4: focus page ke start par wapas
-    const skip = document.querySelector(".skip-link");
-    if (skip) skip.focus({ preventScroll: true });
+    if (skipLink) skipLink.focus({ preventScroll: true });
   });
 }
 
 /* ---------- 5. Scroll reveal (.reveal -> .visible) ---------- */
 const revealEls = document.querySelectorAll(".reveal");
 
-// Week 4: reduced-motion ya purane browser mein content seedha dikhao
 if (reduceMotion || !("IntersectionObserver" in window)) {
   revealEls.forEach((el) => el.classList.add("visible"));
 } else {
@@ -218,7 +222,7 @@ if (form) {
   fields.forEach((f) => {
     f.input.addEventListener("blur", () => validate(f));
     f.input.addEventListener("input", () => {
-      if (f.error.textContent) validate(f); // error dikh raha ho to live check
+      if (f.error.textContent) validate(f);
     });
   });
 
@@ -239,7 +243,6 @@ if (form) {
     status.textContent = "Thanks " + name + "! Your message has been sent.";
     status.classList.add("success");
     form.reset();
-    // Week 4: reset ke baad purane aria-invalid hata do
     fields.forEach((f) => {
       f.input.removeAttribute("aria-invalid");
       f.input.classList.remove("invalid");
